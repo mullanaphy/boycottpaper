@@ -1,0 +1,10 @@
+database:
+  engine: django.db.backends.mysql
+  name: table
+  user: username
+  password: password
+  host: localhost
+  port: 3306
+
+secret:
+  key: django_key

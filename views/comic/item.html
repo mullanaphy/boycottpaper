@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load site %}
+
+{% block title %}{{ comic.title }} | {{ block.super }}{% endblock %}
+
+{% block head %}
+    {{ block.super }}
+    <link rel="canonical" href="{% site "url" %}{% url 'comic.views.load_by_slug' comic=comic.slug _format='html' %}"/>
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>
+            {{ comic.title }}
+            <small><em>Posted: {{ comic.created|date:'M d, Y' }}</em></small>
+        </h1>
+    </div>
+    <div class="row">
+        {% with comic.panel_set.all as panels %}
+            {% if panels|length > 1 %}
+                {% for panel in comic.panels %}
+                    <div class="comic-panel col-lg-3 col-md-6 col-sm-12"><img alt="{{ panel.alt }}" src="{{ panel.source.url }}" /></div>
+                {% endfor %}
+            {% elif panels|length == 1 %}
+                {% with panels|first as panel %}
+                    <div class="comic-panel col-lg-12"><img alt="{{ panel }}" src="{{ panel.source.url }}" /></div>
+                {%  endwith %}
+            {% else %}
+                <div class="comic-panel col-lg-12">Panels missing... Sorry about that...</div>
+            {% endif %}
+        {% endwith %}
+    </div>
+    {% if comic.description %}
+        <div class="jumbotron"><p>{{ comic.description }}</p></div>
+    {% endif %}
+{% endblock %}

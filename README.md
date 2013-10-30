@@ -1,4 +1,4 @@
 boycottpaper
 ============
 
-Source code of my online comic site, boycottpaper.com
+Code that handles my online comic series.

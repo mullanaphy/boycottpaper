@@ -1,0 +1,20 @@
+site:
+  url: http://www.boycotpaper.com
+  title: Boycott Paper!
+  description: Online comic series. One panel and four panels on the darker side.
+  author: John Mullanaphy <john@jo.mu>
+  copyright: '&copy; 2013 <a href="http://jo.mu/">Mullanaphy!</a>, <em>All Rights Reserved</em>.'
+
+media:
+  url: /media/
+  root: /var/www/site/media/
+
+static:
+  url: /resources/
+  root: /var/www/site/web/
+  directory:
+    - /var/www/site/static/
+
+template:
+  directory:
+    - /var/www/site/views/
