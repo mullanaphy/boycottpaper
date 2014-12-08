@@ -22,8 +22,7 @@ DATABASES = {
         'NAME': runtime['database']['name'],
         'USER': runtime['database']['user'],
         'PASSWORD': runtime['database']['password'],
-        'HOST': runtime['database']['host'],
-        'PORT': runtime['database']['port'],
+        'SOCKET': runtime['database']['socket'],
     }
 }
 

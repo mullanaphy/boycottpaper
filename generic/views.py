@@ -8,28 +8,22 @@ from django.http import HttpResponse
 def index(request):
     latest_comic_list = Comic.objects.all().order_by('-created')[:5]
     t = loader.get_template('generic/index.html')
-    c = Context({
-        'latest_comic_list': latest_comic_list,
-    })
+    c = Context({'latest_comic_list': latest_comic_list, })
     return HttpResponse(t.render(c))
+
 
 # Search our comics, blogs, and maybe about me?
 def search(request):
     if request.REQUEST['q']:
-        search = Search.objects.all().filter(content__contains = request.REQUEST['q'])
-        if len(search):
-            t = loader.get_template('generic/search/results.html')
-            c = Context({
-                'q': request.REQUEST['q'],
-                'collection': search,
-            })
-            return HttpResponse(t.render(c))
-        else:
-            return render_to_response('generic/search/empty.html')
+        search = Search.objects.all().filter(content__contains=request.REQUEST['q'].lower())
+        t = loader.get_template('generic/search/results.html')
+        c = Context({'q': request.REQUEST['q'], 'collection': search, })
+        return HttpResponse(t.render(c))
     else:
         return render_to_response('generic/search/form.html')
 
+
 # See an about me page.
 def about(request):
-    about = get_object_or_404(About, pk = 1)
+    about = get_object_or_404(About, pk=1)
     return render_to_response('generic/about.html', {'about': about})

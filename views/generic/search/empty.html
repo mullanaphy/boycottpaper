@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+  <div class="page-header">
+    <h1>Search {% if q %}<strong>{{ q }}</strong>{% if page and page > 1 %}
+      <small>Page {{ page }}</small>{% endif %}{% endif %}</h1>
+  </div>
+  <p>Sorry Charlie, no search results found.</p>
+{% endblock %}

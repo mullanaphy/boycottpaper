@@ -10,7 +10,7 @@
     {% if collection %}
         {% for comic in collection %}
             <div class="media">
-                <a class="pull-left" href="{% url 'comic.views.slug' slug=comic.slug %}">
+                <a class="pull-left" href="{% url 'comic.views.load_by_slug' comic=comic.slug _format='html' %}">
                     <img class="media-object" src="{{ comic.thumbnail }}" alt="{{ comic.description }}">
                 </a>
 
