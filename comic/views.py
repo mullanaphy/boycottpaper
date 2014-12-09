@@ -141,8 +141,8 @@ def json_response(comic):
 
     previous_comic = Comic.objects.filter(pk__lt=comic.id)[:1]
     if previous_comic:
-        response_data['previous'] = reverse('comic.views.load_by_slug',
-            kwargs={'comic': settings.SITE['url'] + previous_comic[0].slug, '_format': 'json'})
+        response_data['previous'] = settings.SITE['url'] + reverse('comic.views.load_by_slug',
+            kwargs={'comic': previous_comic[0].slug, '_format': 'json'})
 
     return HttpResponse(simplejson.dumps(response_data), mimetype="application/json")
 
