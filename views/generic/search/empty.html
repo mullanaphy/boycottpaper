@@ -1,11 +1,10 @@
 {% extends "base.html" %}
+{# Boycott Paper, (c) John Mullanaphy (john@jo.mu) 2014, Licensed with OSL 3.0 #}
 
 {% block title %}Search{% endblock %}
 
 {% block content %}
-  <div class="page-header">
-    <h1>Search {% if q %}<strong>{{ q }}</strong>{% if page and page > 1 %}
-      <small>Page {{ page }}</small>{% endif %}{% endif %}</h1>
+  <h1>Search {% if q %}<strong>{{ q }}</strong>{% if page and page > 1 %}
+    <small>Page {{ page }}</small>{% endif %}{% endif %}</h1>
   </div>
-  <p>Sorry Charlie, no search results found.</p>
 {% endblock %}

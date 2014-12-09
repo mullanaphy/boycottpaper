@@ -1,0 +1,70 @@
+[Boycott Paper](http://www.boycottpaper.com/)
+=============================================
+
+Here's the code base for my comic site Boycott Paper. The code allows someone
+to quickly get a comic site on the web with minor code tweaks. Majority of the
+tweaks being in the *.html files. I'm going to give a rundown on the code's
+structure and be warned this was my first time ever with Django (and Python)
+so if something looks ugly as sin I apologize.
+
+Comic Module
+------------
+
+This is the main and most important module. Inside of this we have **comic.views** which has a load_by_pk and
+load_by_slug which cover the same role, just one for primary key and the other for a slug. Besides those to endpoints we
+also check for .html and .json and return appropriately. Honestly there is zero reason to have a .json version of this
+code base other than I wanted to play around and see if I could make something easier to crawl for a bot.
+
+We also have a latest, first, random, and popular endpoint for our comic. Each of those will do a little bit of logic to
+find a slug and then redirect to that comic's canonical url.
+
+Outside of the routes, we have only two models. The **Comic** model stores any meta data related to any given comic
+while the **Panel** model stores individual images pertaining to the comic. So all **Comics** must be associated to at
+least a single **Panel** and if there's only 1 then the page will render as a single 12 column wide image, otherwise if
+there are more **Panels** then each image will render inside of a class="col-md-6 col-lg-4 col-sm-12". Every time a
+**Comic** or **Panel** is saved, the code will take **Comic** grab all of the meta data into a string then read all of
+the **Panels** and append their text data to that string and finally dump that string into **Search**.
+
+Generic Module
+--------------
+
+Here I tossed all of the code related to the index, search, and about page. So besides a route for each of those there
+is also an **About** model which uses User as a foreign relation and adds a bio section while the **Search** model is
+just a dump of any text related to a **Comic** model so we can do fulltext searches against them.
+
+User Module
+--------------
+
+This module isn't really important at this time. All it does is give a way to browse through **Users**. In the future
+this could be helpful if I add a members section and will allow people to view original sketches, files, and various
+other artwork pieces if they send donations. Don't see donations happening any time soon so this is a todo section.
+
+Requirements
+------------
+
+- Python 2.7.3+
+- Django 1.5.3
+- Yaml
+
+Submitting bugs and feature requests
+------------------------------------
+
+Please send bugs to me via
+[GitHub](https://github.com/mullanaphy/boycottpaper/issues)
+
+Author
+------
+
+John Mullanaphy - <john@jo.mu> - <http://jo.mu/>
+That's it for now...
+
+License
+-------
+
+jo.mu is licensed under the Open Software License (OSL 3.0) -
+see the `LICENSE` file for details
+
+Acknowledgements
+----------------
+
+Nothing

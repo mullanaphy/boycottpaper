@@ -1,6 +1,24 @@
-# Django settings for app project.
+"""
+Boycott Paper
+
+LICENSE
+
+This source file is subject to the Open Software License (OSL 3.0)
+that is bundled with this package in the file LICENSE.txt.
+It is also available through the world-wide-web at this URL:
+http://opensource.org/licenses/osl-3.0.php
+If you did not receive a copy of the license and are unable to
+obtain it through the world-wide-web, please send an email
+to john@jo.mu so we can send you a copy immediately.
+
+@copyright Copyright (c) 2014 John Mullanaphy (http://jo.mu/)
+@license http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+@author John Mullanaphy <john@jo.mu>
+"""
 
 import yaml
+
+# Django settings for app project.
 
 runtime = yaml.load(open('config/runtime.yml', 'r'))
 parameters = yaml.load(open('config/parameters.yml', 'r'))
@@ -22,9 +40,16 @@ DATABASES = {
         'NAME': runtime['database']['name'],
         'USER': runtime['database']['user'],
         'PASSWORD': runtime['database']['password'],
-        'SOCKET': runtime['database']['socket'],
     }
 }
+
+if runtime['database']['socket']:
+    DATABASES['default']['SOCKET'] = runtime['database']['socket']
+elif runtime['database']['host']:
+    DATABASES['default']['HOST'] = runtime['database']['host']
+    if runtime['database']['port']:
+        DATABASES['default']['PORT'] = runtime['database']['port']
+
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name

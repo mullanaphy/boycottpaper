@@ -1,36 +1,49 @@
 {% extends "base.html" %}
+{# Boycott Paper, (c) John Mullanaphy (john@jo.mu) 2014, Licensed with OSL 3.0 #}
 {% load site %}
 
 {% block title %}{{ comic.title }} | {{ block.super }}{% endblock %}
 
 {% block head %}
-    {{ block.super }}
-    <link rel="canonical" href="{% site "url" %}{% url 'comic.views.load_by_slug' comic=comic.slug _format='html' %}"/>
+  {{ block.super }}
+  <link rel="canonical" href="{% site "url" %}{% url 'comic.views.load_by_slug' comic=comic.slug _format='html' %}"/>
 {% endblock %}
 
 {% block content %}
-    <div class="page-header">
-        <h1>
-            {{ comic.title }}
-            <small><em>Posted: {{ comic.created|date:'M d, Y' }}</em></small>
-        </h1>
-    </div>
-    <div class="row">
-        {% with comic.panel_set.all as panels %}
-            {% if panels|length > 1 %}
-                {% for panel in comic.panels %}
-                    <div class="comic-panel col-lg-3 col-md-6 col-sm-12"><img alt="{{ panel.alt }}" src="{{ panel.source.url }}" /></div>
-                {% endfor %}
-            {% elif panels|length == 1 %}
-                {% with panels|first as panel %}
-                    <div class="comic-panel col-lg-12"><img alt="{{ panel }}" src="{{ panel.source.url }}" /></div>
-                {%  endwith %}
-            {% else %}
-                <div class="comic-panel col-lg-12">Panels missing... Sorry about that...</div>
-            {% endif %}
+  <div class="row">
+    {% with comic.panel_set.all as panels %}
+      {% if panels|length > 1 %}
+        {% for panel in comic.panels %}
+          <div class="comic-panel col-lg-3 col-md-6 col-sm-12"><img alt="{{ panel.alt }}" src="{{ panel.source.url }}"/>
+          </div>
+        {% endfor %}
+      {% elif panels|length == 1 %}
+        {% with panels|first as panel %}
+          <div class="comic-panel col-lg-12"><img alt="{{ panel }}" src="{{ panel.source.url }}"/></div>
         {% endwith %}
-    </div>
-    {% if comic.description %}
-        <div class="jumbotron"><p>{{ comic.description }}</p></div>
-    {% endif %}
+      {% else %}
+        <div class="comic-panel col-lg-12">Panels missing... Sorry about that...</div>
+      {% endif %}
+    {% endwith %}
+    <ul class="pagination">
+      {% if previous_comic %}
+        <li><a href="{% url 'comic.views.first' %}">First</a></li>
+        <li><a href="{% url 'comic.views.load_by_slug' comic=previous_comic.slug _format='html' %}">Previous</a></li>
+      {% else %}
+        <li class="disabled"><a href="javascript:void(0);">First</a></li>
+        <li class="disabled"><a href="javascript:void(0);">Previous</a></li>
+      {% endif %}
+      <li class="active"><a href="javascript:void(0);">{{ comic.title }}</a></li>
+      {% if next_comic %}
+        <li><a href="{% url 'comic.views.load_by_slug' comic=next_comic.slug _format='html' %}">Next</a></li>
+        <li><a href="{% url 'comic.views.latest' %}">Current</a></li>
+      {% else %}
+        <li class="disabled"><a href="javascript:void(0);">Next</a></li>
+        <li class="disabled"><a href="javascript:void(0);">Current</a></li>
+      {% endif %}
+    </ul>
+  </div>
+  {% if comic.description %}
+    <p>{{ comic.description }}</p>
+  {% endif %}
 {% endblock %}

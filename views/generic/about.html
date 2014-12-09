@@ -1,10 +1,9 @@
 {% extends "base.html" %}
+{# Boycott Paper, (c) John Mullanaphy (john@jo.mu) 2014, Licensed with OSL 3.0 #}
 
 {% block title %}{{ comic.title }} | {{ block.super }}{% endblock %}
 
 {% block content %}
-    <div class="page-header">
-        <h1>{{ comic.title }} <small><em>Updated: {{ about.updated|date:'M d, Y' }}</em></small></h1>
-    </div>
-    <div class="row">{% autoescape off %}{{ about.content }}{% endautoescape %}</div>
+  <h1>About</h1>
+  {% autoescape off %}{{ about.content }}{% endautoescape %}
 {% endblock %}

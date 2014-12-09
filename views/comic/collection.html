@@ -1,27 +1,26 @@
 {% extends "base.html" %}
+{# Boycott Paper, (c) John Mullanaphy (john@jo.mu) 2014, Licensed with OSL 3.0 #}
 
 {% block title %}Archives | {{ block.super }}{% endblock %}
 
 {% block content %}
-    <div class="page-header">
-        <h1>Archives{% if page and page > 1 %}
-        <small>Page {{ page }}</small>{% endif %}</h1>
-    </div>
-    {% if collection %}
-        {% for comic in collection %}
-            <div class="media">
-                <a class="pull-left" href="{% url 'comic.views.load_by_slug' comic=comic.slug _format='html' %}">
-                    <img class="media-object" src="{{ comic.thumbnail }}" alt="{{ comic.description }}">
-                </a>
+  <h1>Archives{% if page and page > 1 %}
+    <small>Page {{ page }}</small>{% endif %}</h1>
+  {% if collection %}
+    {% for comic in collection %}
+      <div class="media">
+        <a class="pull-left" href="{% url 'comic.views.load_by_slug' comic=comic.slug _format='html' %}">
+          <img class="media-object" src="{{ comic.thumbnail }}" alt="{{ comic.description }}">
+        </a>
 
-                <div class="media-body">
-                    <h4 class="media-heading">{{ comic.title }}</h4>
+        <div class="media-body">
+          <h4 class="media-heading">{{ comic.title }}</h4>
 
-                    <p>{{ comic.description }}</p>
-                </div>
-            </div>
-        {% endfor %}
-    {% else %}
-        <p>No comics are available.</p>
-    {% endif %}
+          <p>{{ comic.description }}</p>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No comics are available.</p>
+  {% endif %}
 {% endblock %}

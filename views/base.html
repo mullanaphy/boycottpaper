@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {% spaceless %}
+  {# Boycott Paper, (c) John Mullanaphy (john@jo.mu) 2014, Licensed with OSL 3.0 #}
   {% load site %}
   <head>
     {% block head %}
@@ -29,7 +30,7 @@
   </head>
   <body>
   <div class="container">
-    <div class="text-center logo"><img alt="Boycott Paper!" src="/media/generic/logo.jpg"/></div>
+    <div class="text-center logo hidden-sm hidden-xs"><img alt="Boycott Paper!" src="/media/generic/logo.jpg"/></div>
     <nav class="navbar navbar-default" role="navigation">
       <div class="navbar-header">
         <a class="navbar-brand hidden-md hidden-lg" href="{% url 'generic.views.index' %}">Boycott Paper!</a>
@@ -61,7 +62,12 @@
         </form>
       </div>
     </nav>
-    <div id="content">{% block content %}{% endblock %}</div>
+    <div class="row">
+      <div class="col-lg-8">{% block content %}{% endblock %}</div>
+      <div class="col-lg-4">
+        <p>Some info about boycott paper.</p>
+      </div>
+    </div>
     <footer class="footer">{% block copyright %}{% site "copyright" %}{% endblock %}</footer>
   </div>
   {% block foot_js %}{% endblock %}

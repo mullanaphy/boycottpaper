@@ -1,4 +1,22 @@
 # -*- coding: utf-8 -*-
+"""
+Boycott Paper
+
+LICENSE
+
+This source file is subject to the Open Software License (OSL 3.0)
+that is bundled with this package in the file LICENSE.txt.
+It is also available through the world-wide-web at this URL:
+http://opensource.org/licenses/osl-3.0.php
+If you did not receive a copy of the license and are unable to
+obtain it through the world-wide-web, please send an email
+to john@jo.mu so we can send you a copy immediately.
+
+@copyright Copyright (c) 2014 John Mullanaphy (http://jo.mu/)
+@license http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+@author John Mullanaphy <john@jo.mu>
+"""
+
 import re
 from django.db import models
 from django.contrib.auth.models import User
@@ -15,7 +33,6 @@ class Comic(models.Model):
     slug = models.SlugField(max_length=32)
     title = models.CharField(max_length=32)
     description = models.CharField(max_length=255)
-    cover = models.FileField(upload_to='comic/%y/%m/%d/%cover')
     created = models.DateTimeField('date created', auto_now_add=True)
     updated = models.DateTimeField('date updated', auto_now=True)
 
@@ -52,10 +69,10 @@ def on_comic_save_update_search_data(sender, instance, **kwargs):
     # Add all of our content into Search, including al text from all
     # of the panels.
     content = instance.title + ' ' + instance.description
-    content = content.lower()
     for panel in instance.panel_set.all():
         content += ' ' + panel.alt
-    search.content = re.sub(r'[^a-zA-Z0-9 ]+', '', content)
+    content = content.lower()
+    search.content = re.sub(r'[^a-z0-9 ]+', '', content)
 
     search.title = instance.title
     search.description = instance.description
