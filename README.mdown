@@ -1,7 +1,7 @@
 [Boycott Paper](http://www.boycottpaper.com/)
 =============================================
 
-Here's the code base for my comic site Boycott Paper. The code allows someone
+Here's the source code for my comic site Boycott Paper. The code allows someone
 to quickly get a comic site on the web with minor code tweaks. Majority of the
 tweaks being in the *.html files. I'm going to give a rundown on the code's
 structure and be warned this was my first time ever with Django (and Python)
@@ -61,7 +61,7 @@ That's it for now...
 License
 -------
 
-jo.mu is licensed under the Open Software License (OSL 3.0) -
+Boycott Paper's source code is licensed under the Open Software License (OSL 3.0) -
 see the `LICENSE` file for details
 
 Acknowledgements
