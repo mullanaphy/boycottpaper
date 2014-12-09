@@ -7,6 +7,10 @@ tweaks being in the *.html files. I'm going to give a rundown on the code's
 structure and be warned this was my first time ever with Django (and Python)
 so if something looks ugly as sin I apologize.
 
+Please note, the source code is completely free to use while any and all actual
+content on the site is not based on this license. This license gives you free
+use of the source code only.
+
 Comic Module
 ------------
 
