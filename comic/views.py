@@ -25,6 +25,7 @@ from django.core.urlresolvers import reverse
 import json as simplejson
 import random as randomint
 from comic.models import Comic
+from collections import OrderedDict
 
 
 ##
@@ -35,7 +36,7 @@ from comic.models import Comic
 def index(request):
     collection = Comic.objects.all().order_by('-created')[:3]
     t = loader.get_template('comic/collection.html')
-    c = Context({'collection': collection, })
+    c = Context({'collection': collection, 'path': request.path})
     return HttpResponse(t.render(c))
 
 
@@ -64,10 +65,10 @@ def latest(request):
 #
 # @param request HttpRequest coming in from Django.
 # @return HttpResponse
-def popular(popular):
+def popular(request):
     comic_list = Comic.objects.all().order_by('-karma')[:5]
     t = loader.get_template('comic/collection.html')
-    c = Context({'comic_list': comic_list, })
+    c = Context({'comic_list': comic_list, 'path': request.path})
     return HttpResponse(t.render(c))
 
 
@@ -98,7 +99,7 @@ def load_by_pk(request, comic, _format='html'):
             pass
     else:
         comic = get_object_or_404(Comic, pk=comic)
-        return html_response(comic)
+        return html_response(comic, request)
 
 
 ##
@@ -116,7 +117,7 @@ def load_by_slug(request, comic, _format='html'):
             pass
     else:
         comic = get_object_or_404(Comic, slug=comic)
-        return html_response(comic)
+        return html_response(comic, request)
 
 
 ##
@@ -125,24 +126,38 @@ def load_by_slug(request, comic, _format='html'):
 # @param comic Comic model.
 # @return HttpResponse
 def json_response(comic):
-    response_data = {"id": int(comic.pk), "url": settings.SITE['url'] + reverse('comic.views.load_by_slug',
-        kwargs={'comic': comic.slug, '_format': 'html'}), "slug": comic.slug, "title": comic.title,
-                     "description": comic.description,
-                     "author": settings.SITE['url'] + reverse('user.views.load_by_slug',
-                         kwargs={'user': comic.author.username, '_format': 'json'}), "panels": [],
-                     "created": str(comic.created), "updated": str(comic.updated)}
+    response_data = OrderedDict([
+        ("id", int(comic.pk)),
+        ("url", settings.SITE['url'] + reverse('comic.views.load_by_slug', kwargs={
+            'comic': comic.slug,
+            '_format': 'html'
+        })),
+        ("slug", comic.slug),
+        ("title", comic.title),
+        ("description", comic.description),
+        ("author", settings.SITE['url'] + reverse('user.views.load_by_slug', kwargs={
+            'user': comic.author.username,
+            '_format': 'json'
+        })),
+        ("panels", []),
+        ("created", str(comic.created)), ("updated", str(comic.updated))
+    ])
     for panel in comic.panel_set.all().order_by('sort'):
         response_data['panels'].append(settings.SITE['url'] + panel.source.url)
 
-    next_comic = Comic.objects.filter(pk__gt=comic.id)[:1]
-    if next_comic:
-        response_data['next'] = settings.SITE['url'] + reverse('comic.views.load_by_slug',
-            kwargs={'comic': next_comic[0].slug, '_format': 'json'})
-
     previous_comic = Comic.objects.filter(pk__lt=comic.id)[:1]
     if previous_comic:
-        response_data['previous'] = settings.SITE['url'] + reverse('comic.views.load_by_slug',
-            kwargs={'comic': previous_comic[0].slug, '_format': 'json'})
+        response_data['previous'] = settings.SITE['url'] + reverse('comic.views.load_by_slug', kwargs={
+            'comic': previous_comic[0].slug,
+            '_format': 'json'
+        })
+
+    next_comic = Comic.objects.filter(pk__gt=comic.id)[:1]
+    if next_comic:
+        response_data['next'] = settings.SITE['url'] + reverse('comic.views.load_by_slug', kwargs={
+            'comic': next_comic[0].slug,
+            '_format': 'json'
+        })
 
     return HttpResponse(simplejson.dumps(response_data), mimetype="application/json")
 
@@ -151,8 +166,9 @@ def json_response(comic):
 # Render an HTML response and send it back.
 #
 # @param comic Comic model.
+# @param request HttpRequest coming in from Django.
 # @return HttpResponse
-def html_response(comic):
+def html_response(comic, request):
     next_comic = Comic.objects.filter(pk__gt=comic.id)[:1]
     if next_comic:
         next_comic = next_comic[0]
@@ -163,5 +179,9 @@ def html_response(comic):
         previous_comic = previous_comic[0]
     else:
         previous_comic = False
-    return render_to_response('comic/item.html',
-        {'comic': comic, 'next_comic': next_comic, 'previous_comic': previous_comic})
+    return render_to_response('comic/item.html', {
+        'comic': comic,
+        'next_comic': next_comic,
+        'previous_comic': previous_comic,
+        'path': request.path
+    })

@@ -9,28 +9,26 @@
       <title>{% site "title" %}</title>
       {% load staticfiles %}
       {% block head_css %}
-        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css"/>
-        <link rel="stylesheet" href="{% static 'css/core.min.css' %}" type="text/css"/>
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/core.min.css' %}" type="text/css">
       {% endblock %}
       {% block head_js %}
-        <script type="text/javascript" data-main="{% static 'js/core.min.js' %}"
-                src="{% static 'js/require.min.js' %}"></script>
-        <script type="text/javascript">if (window.location.hash.toString().match('!')) {
-          var url = window.location.hash.toString().split('!');
-          window.location = url[1];
-        }</script>
+        <script type="text/javascript">if(window.location.hash.toString().match('!'))window.location=window.location.hash.toString().split('!')[1]</script>
+        <script type="text/javascript" data-main="{% static 'js/core.min.js' %}" src="{% static 'js/require.min.js' %}"></script>
       {% endblock %}
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
       {% block head_meta %}
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="{% block meta_description %}{% site "description" %}{% endblock %}">
-        <meta name="author" content="{% block meta_author %}{% site "author" %}{% endblock %}">
+        <link rel="author" content="{% block head_meta_google %}https://plus.google.com/+JohnMullanaphy{% endblock %}">
+        <meta name="description" content="{% block head_meta_description %}{% site "description" %}{% endblock %}">
+        <meta name="author" content="{% block head_meta_author %}{% site "author" %}{% endblock %}">
+        {% block head_meta_facebook %}{% endblock %}
       {% endblock %}
-      <link rel="shortcut icon" href="/media/favicon.png"/>
+      <link rel="shortcut icon" href="/media/favicon.png">
     {% endblock %}
   </head>
   <body>
   <div class="container">
-    <div class="text-center logo hidden-sm hidden-xs"><img alt="Boycott Paper!" src="/media/generic/logo.jpg"/></div>
+    <div class="text-center logo hidden-sm hidden-xs"><img alt="Boycott Paper!" src="/media/generic/logo.jpg"></div>
     <nav class="navbar navbar-default" role="navigation">
       <div class="navbar-header">
         <a class="navbar-brand hidden-md hidden-lg" href="{% url 'generic.views.index' %}">Boycott Paper!</a>
@@ -43,11 +41,13 @@
       </div>
       <div class="collapse navbar-collapse navbar-dropdown">
         <ul class="nav navbar-nav">
-          <li><a href="{% url 'comic.views.latest' %}">Current</a></li>
-          <li><a href="{% url 'comic.views.first' %}">First</a></li>
-          <li><a href="{% url 'comic.views.index' %}">Archives</a></li>
-          <li><a href="{% url 'generic.views.about' %}">About</a></li>
-          <li><a href="http://www.patreon.com/boycottpaper">Donate</a></li>
+          {% url 'generic.views.index' as home %}
+          {% url 'comic.views.index' as archives %}
+          {% url 'generic.views.about' as about %}
+          <li{% if home == path %} class="active"{% endif %}><a href="{{ home }}">Latest</a></li>
+          <li{% if archives == path %} class="active"{% endif %}><a href="{{ archives }}">Archives</a></li>
+          <li{% if about == path %} class="active"{% endif %}><a href="{{ about }}">About</a></li>
+          <li><a href="http://www.patreon.com/boycottpaper">Support</a></li>
         </ul>
         <form action="{% url 'generic.views.search' %}" class="navbar-form navbar-right" role="search">
           <div class="input-group">
@@ -55,20 +55,23 @@
               <input type="text" class="form-control" name="q" placeholder="Search" value="{{ request.GET.q }}">
             </div>
             <div class="input-group-btn">
-              <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"
-                                                                  aria-hidden="true"></span></button>
+              <button type="submit" class="btn btn-primary">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+              </button>
             </div>
           </div>
         </form>
       </div>
     </nav>
-    <div class="row">
-      <div class="col-lg-8">{% block content %}{% endblock %}</div>
-      <div class="col-lg-4">
-        <p>Some info about boycott paper.</p>
+    {% block content %}{% endblock %}
+    <footer class="footer">{% block copyright %}
+      <div class="pull-left">{% site "copyright" %}{% endblock %}</div>
+      <div class="pull-right">
+        <ul>
+          <li class="list-inline"><a href="https://github.com/mullanaphy/boycottpaper">Source Code</a></li>
+        </ul>
       </div>
-    </div>
-    <footer class="footer">{% block copyright %}{% site "copyright" %}{% endblock %}</footer>
+    </footer>
   </div>
   {% block foot_js %}{% endblock %}
   </body>

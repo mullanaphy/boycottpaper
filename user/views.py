@@ -18,12 +18,13 @@ to john@jo.mu so we can send you a copy immediately.
 """
 
 from django.template import Context, loader
-from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.shortcuts import render_to_response, get_object_or_404
 from django.conf import settings
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 import json as simplejson
+from collections import OrderedDict
 
 
 ##
@@ -35,7 +36,7 @@ import json as simplejson
 def index(request):
     collection = User.objects.all().order_by('-created')[:5]
     t = loader.get_template('user/collection.html')
-    c = Context({'collection': collection, })
+    c = Context({'collection': collection, 'path': request.path})
     return HttpResponse(t.render(c))
 
 
@@ -56,7 +57,7 @@ def load_by_pk(request, user, _format='html'):
             pass
     else:
         user = get_object_or_404(User, pk=user)
-        return html_response(user)
+        return html_response(user, request)
 
 
 ##
@@ -76,7 +77,7 @@ def load_by_slug(request, user, _format='html'):
             pass
     else:
         user = get_object_or_404(User, username=user)
-        return html_response(user)
+        return html_response(user, request)
 
 
 ##
@@ -85,12 +86,23 @@ def load_by_slug(request, user, _format='html'):
 # @param user User model.
 # @return HttpResponse
 def json_response(user):
-    response_data = {"id": int(user.pk), "username": user.username, "fullname": user.first_name + " " + user.last_name,
-                     "bio": user.about_set.all()[:1][0].content, "email": user.email, "comics": [],
-                     "created": str(user.date_joined), "updated": str(user.last_login)}
+    response_data = OrderedDict([
+        ("id", int(user.pk)),
+        ("username", user.username),
+        ("fullname", user.first_name + " " + user.last_name),
+        ("bio", user.about_set.all()[:1][0].content),
+        ("email", user.email),
+        ("comics", []),
+        ("created", str(user.date_joined)),
+        ("updated", str(user.last_login))
+    ])
     for comic in user.comic_set.all().order_by('-pk')[:5]:
         response_data['comics'].append(
-            settings.SITE['url'] + reverse('comic.views.load_by_slug', kwargs={'comic': comic.slug, '_format': 'html'}))
+            settings.SITE['url'] + reverse('comic.views.load_by_slug', kwargs={
+                'comic': comic.slug,
+                '_format': 'json'
+            })
+        )
     return HttpResponse(simplejson.dumps(response_data), mimetype="application/json")
 
 
@@ -98,7 +110,10 @@ def json_response(user):
 # Send an HTML response back.
 #
 # @param user User model.
+# @param request HttpRequest coming in from Django.
 # @return HttpResponse
-def html_response(user):
-    return render_to_response('user/item.html', {'user': user})
-
+def html_response(user, request):
+    return render_to_response('user/item.html', {
+        'user': user,
+        'path': request.path
+    })

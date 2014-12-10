@@ -7,19 +7,11 @@
   <h1>Archives{% if page and page > 1 %}
     <small>Page {{ page }}</small>{% endif %}</h1>
   {% if collection %}
-    {% for comic in collection %}
-      <div class="media">
-        <a class="pull-left" href="{% url 'comic.views.load_by_slug' comic=comic.slug _format='html' %}">
-          <img class="media-object" src="{{ comic.thumbnail }}" alt="{{ comic.description }}">
-        </a>
-
-        <div class="media-body">
-          <h4 class="media-heading">{{ comic.title }}</h4>
-
-          <p>{{ comic.description }}</p>
-        </div>
-      </div>
-    {% endfor %}
+    <ul>
+      {% for row in collection %}
+        <li><a href="{% url 'comic.views.load_by_slug' comic=row.slug _format='html' %}">{{ row.title }}</a></li>
+      {% endfor %}
+    </ul>
   {% else %}
     <p>No comics are available.</p>
   {% endif %}

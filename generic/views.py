@@ -22,6 +22,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from comic.models import Comic
 from generic.models import Search, About
 from django.http import HttpResponse
+from comic.views import html_response as comic_html_response
 
 
 ##
@@ -30,10 +31,12 @@ from django.http import HttpResponse
 # @param request HttpRequest coming in from Django.
 # @return HttpResponse
 def index(request):
-    collection = Comic.objects.all().order_by('-created')[:3]
-    t = loader.get_template('generic/collection.html')
-    c = Context({'collection': collection, })
-    return HttpResponse(t.render(c))
+    comic = Comic.objects.all().order_by('-id')[:1]
+    if comic:
+        comic = comic[0]
+        return comic_html_response(comic, request)
+
+    return render_to_response('generic/index.html', {'path': request.path})
 
 
 ##
@@ -49,7 +52,7 @@ def search(request):
         c = Context({'q': request.REQUEST['q'], 'collection': search, })
         return HttpResponse(t.render(c))
     else:
-        return render_to_response('generic/search/results.html')
+        return render_to_response('generic/search/results.html', {'path': request.path})
 
 
 ##
@@ -60,4 +63,4 @@ def search(request):
 # @return HttpResponse
 def about(request):
     about = get_object_or_404(About, pk=1)
-    return render_to_response('generic/about.html', {'about': about})
+    return render_to_response('generic/about.html', {'about': about, 'path': request.path})

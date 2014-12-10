@@ -5,34 +5,34 @@
 
 {% block content %}
   {% if collection %}
-    {% for comic in collection %}
-      <div class="row">
-        {% with comic.panel_set.all as panels %}
-          {% if panels|length > 1 %}
-            {% for panel in comic.panels %}
-              <div class="comic-panel col-lg-3 col-md-6 col-sm-12">
-                <a href="{% url 'comic.views.load_by_slug' comic=comic.slug _format='html' %}">
-                  <img alt="{{ panel.alt }}" src="{{ panel.source.url }}"/>
-                </a>
-              </div>
-            {% endfor %}
-          {% elif panels|length == 1 %}
-            {% with panels|first as panel %}
-              <div class="comic-panel col-lg-12">
-                <a href="{% url 'comic.views.load_by_slug' comic=comic.slug _format='html' %}">
-                  <img alt="{{ panel }}" src="{{ panel.source.url }}"/>
-                </a>
-              </div>
-            {% endwith %}
-          {% else %}
-            <div class="comic-panel col-lg-12">Panels missing... Sorry about that...</div>
-          {% endif %}
-        {% endwith %}
+    <div class="row">
+      <div class="col-lg-offset-2 col-lg-8 col-lg-offset-2 text-center">
+        {% for comic in collection %}
+          {% with comic.panel_set.all as panels %}
+            <h2>
+              <a
+                  href="{% url 'comic.views.load_by_slug' comic=comic.slug _format='html' %}">{{ comic.title }}</a>
+            </h2>
+            {% if panels|length > 1 %}
+              {% for panel in comic.panels %}
+                <div class="row">
+                  <div class="comic-panel col-lg-3 col-md-6 col-sm-12">
+                    <img alt="{{ panel.alt }}" src="{{ panel.source.url }}">
+                  </div>
+                </div>
+              {% endfor %}
+            {% elif panels|length == 1 %}
+              {% with panels|first as panel %}
+                <img alt="{{ comic.title }}" class="img-responsive text-center" src="{{ panel.source.url }}">
+              {% endwith %}
+            {% else %}
+              Panels missing... Sorry about that...
+            {% endif %}
+          {% endwith %}
+          <hr>
+        {% endfor %}
       </div>
-      {% if comic.description %}
-        <p>{{ comic.description }}</p>
-      {% endif %}
-    {% endfor %}
+    </div>
   {% else %}
     <p>No comics are available.</p>
   {% endif %}
