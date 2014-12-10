@@ -13,7 +13,7 @@
 {% block head_meta_facebook %}
   <meta property="og:site_name" content="John Mullanaphy">
   <meta property="og:title" content="{{ comic.title }}">
-  <meta property="og:type" content="image">
+  <meta property="og:type" content="website">
   <meta property="og:url" content="{% site "url" %}{% url 'comic.views.load_by_slug' comic=comic.slug _format='html' %}">
   <meta property="og:image" content="{% site "url" %}{{ comic.panel_set.all.0.source.url }}">
   <meta property="og:description" content="{{ comic.description }}">
