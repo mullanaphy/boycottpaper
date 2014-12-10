@@ -7,13 +7,19 @@
     {% block head %}
       <meta charset="utf-8">
       <title>{% site "title" %}</title>
+      {% block head_trackers %}
+        {% google_analytics %}
+      {% endblock %}
       {% load staticfiles %}
       {% block head_css %}
         <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
         <link rel="stylesheet" href="{% static 'css/core.min.css' %}" type="text/css">
       {% endblock %}
       {% block head_js %}
-        <script type="text/javascript">if(window.location.hash.toString().match('!'))window.location=window.location.hash.toString().split('!')[1]</script>
+        <script
+            type="text/javascript">if (window.location.hash.toString().match('!')) {
+          window.location = window.location.hash.toString().split('!')[1]
+        }</script>
         <script type="text/javascript" data-main="{% static 'js/core.min.js' %}" src="{% static 'js/require.min.js' %}"></script>
       {% endblock %}
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
