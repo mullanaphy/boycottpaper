@@ -19,3 +19,6 @@ static:
 template:
   directory:
     - /var/www/site/views/
+
+admins:
+  - [John Mullanaphy, john@jo.mu]

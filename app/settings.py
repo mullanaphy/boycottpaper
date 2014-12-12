@@ -28,9 +28,7 @@ TEMPLATE_DEBUG = DEBUG
 
 SITE = parameters['site']
 
-ADMINS = (
-    ('John Mullanaphy', 'john@jo.mu'),
-)
+ADMINS = parameters['admins']
 
 MANAGERS = ADMINS
 
@@ -43,11 +41,11 @@ DATABASES = {
     }
 }
 
-if runtime['database']['socket']:
+if 'socket' in runtime['database']:
     DATABASES['default']['SOCKET'] = runtime['database']['socket']
-elif runtime['database']['host']:
+elif 'host' in runtime['database']:
     DATABASES['default']['HOST'] = runtime['database']['host']
-    if runtime['database']['port']:
+    if 'port' in runtime['database']:
         DATABASES['default']['PORT'] = runtime['database']['port']
 
 
