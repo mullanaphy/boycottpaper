@@ -36,7 +36,7 @@
           <li><a href="{% url 'comic.views.load_by_slug' comic=next_comic.slug _format='html' %}"><span class="hidden-xs">Next</span><span class="visible-xs">&raquo;</span></a></li>
           <li><a href="{% url 'comic.views.latest' %}"><span class="hidden-xs">Latest</span><span class="visible-xs">&raquo;&raquo;</span></a></li>
         {% else %}
-          <li class="disabled"><a href="javascript:void(0);">Next</a></li>
+          <li class="disabled"><a href="javascript:void(0);"><span class="hidden-xs">Next</span><span class="visible-xs">&raquo;</span></a></li>
           <li class="disabled"><a href="javascript:void(0);"><span class="hidden-xs">Latest</span><span class="visible-xs">&raquo;&raquo;</span></a></li>
         {% endif %}
       </ul>
