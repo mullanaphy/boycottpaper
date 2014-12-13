@@ -45,12 +45,12 @@
       {% if panels|length > 1 %}
         {% for panel in comic.panels %}
           <div class="comic-panel col-lg-3 col-md-6 col-sm-12">
-            <img alt="{{ panel.alt }}" class="img-responsive" src="{{ panel.source.url }}">
+            <img alt="{{ panel.alt }}" src="{{ panel.source.url }}">
           </div>
         {% endfor %}
       {% elif panels|length == 1 %}
         {% with panels|first as panel %}
-          <div class="comic-panel col-lg-12 text-center"><img alt="{{ comic.title }}" src="{{ panel.source.url }}">
+          <div class="comic-panel col-lg-12 text-center"><img alt="{{ comic.title }}" class="img-responsive" src="{{ panel.source.url }}">
           </div>
         {% endwith %}
       {% else %}
