@@ -45,7 +45,7 @@
       {% if panels|length > 1 %}
         {% for panel in comic.panels %}
           <div class="comic-panel col-lg-3 col-md-6 col-sm-12">
-            <img alt="{{ panel.alt }}" src="{{ panel.source.url }}">
+            <img alt="{{ panel.alt }}" class="img-responsive" src="{{ panel.source.url }}">
           </div>
         {% endfor %}
       {% elif panels|length == 1 %}
