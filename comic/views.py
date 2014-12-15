@@ -145,7 +145,7 @@ def json_response(comic):
     for panel in comic.panel_set.all().order_by('sort'):
         response_data['panels'].append(settings.SITE['url'] + panel.source.url)
 
-    previous_comic = Comic.objects.filter(pk__lt=comic.id)[:1]
+    previous_comic = Comic.objects.filter(pk__lt=comic.id).order_by('-id')[:1]
     if previous_comic:
         response_data['previous'] = settings.SITE['url'] + reverse('comic.views.load_by_slug', kwargs={
             'comic': previous_comic[0].slug,
@@ -174,7 +174,7 @@ def html_response(comic, request):
         next_comic = next_comic[0]
     else:
         next_comic = False
-    previous_comic = Comic.objects.filter(pk__lt=comic.id)[:1]
+    previous_comic = Comic.objects.filter(pk__lt=comic.id).order_by('-id')[:1]
     if previous_comic:
         previous_comic = previous_comic[0]
     else:
