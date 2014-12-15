@@ -5,6 +5,7 @@ site:
   author: John Mullanaphy <john@jo.mu>
   copyright: '&copy; <a href="http://jo.mu/">John Mullanaphy</a> 2014, <em>All Rights Reserved</em>.'
   google_analytics: UA-XXXXXX-1
+  addthis: ra-xxxxxxxxxxx
 
 media:
   url: /media/

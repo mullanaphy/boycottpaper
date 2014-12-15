@@ -19,6 +19,7 @@ to john@jo.mu so we can send you a copy immediately.
 
 from django import template
 from django.conf import settings
+import urllib
 
 register = template.Library()
 
@@ -34,7 +35,7 @@ def site(name):
 @register.simple_tag
 def google_analytics():
     if 'google_analytics' in settings.SITE:
-        tracker = """<script>
+        code = """<script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -44,6 +45,38 @@ def google_analytics():
   ga('send', 'pageview');
 
 </script>"""
-        return tracker
+        return code
     else:
         return ""
+
+
+@register.simple_tag
+def facebook_api():
+    if 'facebook_api' in settings.SITE:
+        code = """<div id="fb-root"></div>
+  <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=""" + str(settings.SITE['facebook_api']) + """&version=v2.0";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>"""
+        return code
+    else:
+        return ""
+
+
+@register.simple_tag
+def addthis_init():
+    if 'addthis' in settings.SITE:
+        return '<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=' + settings.SITE['addthis'] +'" async="async"></script>'
+    else:
+        return ""
+
+
+@register.simple_tag
+def addthis_toolbox():
+    if 'addthis' in settings.SITE:
+        return '<div class="addthis_sharing_toolbox"></div>'
+    else:
+        return ''

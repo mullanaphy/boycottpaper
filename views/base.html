@@ -14,6 +14,7 @@
       {% block head_css %}
         <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
         <link rel="stylesheet" href="{% static 'css/core.min.css' %}" type="text/css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" type="text/css">
       {% endblock %}
       {% block head_js %}
         <script
@@ -73,13 +74,16 @@
     <footer class="footer">{% block copyright %}
       <div class="pull-left">{% site "copyright" %}{% endblock %}</div>
       <div class="pull-right">
-        <ul>
-          <li class="list-inline"><a href="https://github.com/mullanaphy/boycottpaper">Source Code</a></li>
+        <ul class="list-inline">
+          <li><a href="https://www.facebook.com/boycottpaper"><span class="fa fa-facebook-square"></span><span class="hidden-xs"> Facebook</span></a></li>
+          <li><a href="https://www.twitter.com/boycottpaper"><span class="fa fa-twitter-square"></span><span class="hidden-xs"> Twitter</span></a></li>
+          <li><a href="https://github.com/mullanaphy/boycottpaper"><span class="fa fa-github-alt"></span><span class="hidden-xs"> Source Code</span></a></li>
         </ul>
       </div>
     </footer>
   </div>
   {% block foot_js %}{% endblock %}
+  {% addthis_init %}
   </body>
   </html>
 {% endspaceless %}
