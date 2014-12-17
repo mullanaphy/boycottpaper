@@ -69,7 +69,8 @@ def facebook_api():
 @register.simple_tag
 def addthis_init():
     if 'addthis' in settings.SITE:
-        return '<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=' + settings.SITE['addthis'] +'" async="async"></script>'
+        return '<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=' + settings.SITE[
+            'addthis'] + '" async="async"></script>'
     else:
         return ""
 
@@ -78,5 +79,18 @@ def addthis_init():
 def addthis_toolbox():
     if 'addthis' in settings.SITE:
         return '<div class="addthis_sharing_toolbox"></div>'
+    else:
+        return ''
+
+
+@register.simple_tag
+def social_media():
+    if 'social' in settings.SITE:
+        code = '<div class="pull-right"><ul class="list-inline">'
+        for social in settings.SITE['social']:
+            code += '<li><a href="' + social[2] + '"><span class="fa fa-' + social[0]
+            code += '"></span><span class="hidden-xs"> ' + social[1] + '</span></a></li>'
+        code += '</ul></div>'
+        return code
     else:
         return ''

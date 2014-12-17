@@ -17,10 +17,7 @@
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" type="text/css">
       {% endblock %}
       {% block head_js %}
-        <script
-            type="text/javascript">if (window.location.hash.toString().match('!')) {
-          window.location = window.location.hash.toString().split('!')[1]
-        }</script>
+        <script type="text/javascript">if(window.location.hash.toString().match('!')){window.location=window.location.hash.toString().split('!')[1]}</script>
         <script type="text/javascript" data-main="{% static 'js/core.min.js' %}" src="{% static 'js/require.min.js' %}"></script>
       {% endblock %}
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,10 +32,10 @@
   </head>
   <body>
   <div class="container">
-    <div class="text-center logo hidden-sm hidden-xs"><img alt="Boycott Paper!" src="/media/generic/logo.jpg"></div>
+    <div class="text-center logo hidden-sm hidden-xs"><img alt="{% site 'title' %}" src="/media/generic/logo.jpg"></div>
     <nav class="navbar navbar-default" role="navigation">
       <div class="navbar-header">
-        <a class="navbar-brand hidden-md hidden-lg" href="{% url 'generic.views.index' %}">Boycott Paper!</a>
+        <a class="navbar-brand hidden-md hidden-lg" href="{% url 'generic.views.index' %}">{% site 'title' %}</a>
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-dropdown">
           <span class="sr-only">Toggle navigation</span>
           <span class="icon-bar"></span>
@@ -54,7 +51,7 @@
           <li{% if home == path %} class="active"{% endif %}><a href="{{ home }}">Latest</a></li>
           <li{% if archives == path %} class="active"{% endif %}><a href="{{ archives }}">Archives</a></li>
           <li{% if about == path %} class="active"{% endif %}><a href="{{ about }}">About</a></li>
-          <li><a href="http://www.patreon.com/boycottpaper">Support</a></li>
+          <li><a href="{% site 'patreon' %}" class="">Support</a></li>
         </ul>
         <form action="{% url 'generic.views.search' %}" class="navbar-form navbar-right" role="search">
           <div class="input-group">
@@ -73,13 +70,7 @@
     {% block content %}{% endblock %}
     <footer class="footer">{% block copyright %}
       <div class="pull-left">{% site "copyright" %}{% endblock %}</div>
-      <div class="pull-right">
-        <ul class="list-inline">
-          <li><a href="https://www.facebook.com/boycottpaper"><span class="fa fa-facebook"></span><span class="hidden-xs"> Facebook</span></a></li>
-          <li><a href="https://www.twitter.com/boycottpaper"><span class="fa fa-twitter"></span><span class="hidden-xs"> Twitter</span></a></li>
-          <li><a href="https://github.com/mullanaphy/boycottpaper"><span class="fa fa-github"></span><span class="hidden-xs"> Source Code</span></a></li>
-        </ul>
-      </div>
+      {% social_media %}
     </footer>
   </div>
   {% block foot_js %}{% endblock %}

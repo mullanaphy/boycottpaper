@@ -1,11 +1,16 @@
 site:
-  url: http://www.boycotpaper.com
-  title: Boycott Paper!
-  description: Online comic series. One panel and four panels on the darker side.
-  author: John Mullanaphy <john@jo.mu>
-  copyright: '&copy; <a href="http://jo.mu/">John Mullanaphy</a> 2014, <em>All Rights Reserved</em>.'
+  url: http://www.example.com
+  title: My Radical Comic Website
+  description: Hahaha, these jokes are so damn funny!
+  author: Comic Girl
+  copyright: '&copy; Comic Girl 1888, <em>All Rights Reserved</em>.'
   google_analytics: UA-XXXXXX-1
   addthis: ra-xxxxxxxxxxx
+  patreon: http://www.patreon.com
+  social:
+    - [facebook, Facebook, 'https://www.facebook.com/facebookname']
+    - [twitter, Twitter, 'https://www.twitter.com/twittername']
+    # [Font Awesome Icon, Title, Url]
 
 media:
   url: /media/
@@ -22,4 +27,4 @@ template:
     - /var/www/site/views/
 
 admins:
-  - [John Mullanaphy, john@jo.mu]
+  - [Comic Girl, comicgirl@example.com]
