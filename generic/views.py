@@ -23,6 +23,7 @@ from comic.models import Comic
 from generic.models import Search, About
 from django.http import HttpResponse
 from comic.views import html_response as comic_html_response
+import markdown
 
 
 ##
@@ -63,4 +64,4 @@ def search(request):
 # @return HttpResponse
 def about(request):
     about = get_object_or_404(About, pk=1)
-    return render_to_response('generic/about.html', {'about': about, 'path': request.path})
+    return render_to_response('generic/about.html', {'content': markdown.markdown(about.content), 'path': request.path})

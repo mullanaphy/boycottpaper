@@ -49,6 +49,7 @@ Requirements
 - Python 2.7.3+
 - Django 1.5.3
 - Yaml
+- Markdown
 
 Submitting bugs and feature requests
 ------------------------------------
