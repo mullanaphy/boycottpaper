@@ -23,7 +23,7 @@ import yaml
 runtime = yaml.load(open('config/runtime.yml', 'r'))
 parameters = yaml.load(open('config/parameters.yml', 'r'))
 
-DEBUG = True
+DEBUG = runtime['debug']
 TEMPLATE_DEBUG = DEBUG
 
 SITE = parameters['site']
@@ -172,3 +172,9 @@ LOGGING = {
         },
     }
 }
+
+# Django 1.5+ needs to know what the allowed hosts are if we're not in DEBUG mode.
+if 'hosts' in runtime:
+    ALLOWED_HOSTS = runtime['hosts']
+else:
+    ALLOWED_HOSTS = ['*']

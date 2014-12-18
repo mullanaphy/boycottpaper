@@ -8,3 +8,8 @@ database:
 
 secret:
   key: django_key
+
+debug: true
+
+hosts:
+  - '*'

@@ -65,3 +65,50 @@ def search(request):
 def about(request):
     about = get_object_or_404(About, pk=1)
     return render_to_response('generic/about.html', {'content': markdown.markdown(about.content), 'path': request.path})
+
+
+##
+# Render our 400 error pages.
+#
+# @param request HttpRequest coming in from Django.
+# @return HttpResponse
+def error400(request):
+    return error(400, request)
+
+
+##
+# Render our 403 error pages.
+#
+# @param request HttpRequest coming in from Django.
+# @return HttpResponse
+def error403(request):
+    return error(403, request)
+
+
+##
+# Render our 404 error pages.
+#
+# @param request HttpRequest coming in from Django.
+# @return HttpResponse
+def error404(request):
+    return error(404, request)
+
+
+##
+# Render our 500 error pages.
+#
+# @param request HttpRequest coming in from Django.
+# @return HttpResponse
+def error500(request):
+    return error(500, request)
+
+
+##
+# Actually render our error pages.
+#
+# @param int status_code
+# @param request HttpRequest coming in from Django.
+# @return HttpResponse
+def error(status_code, request):
+    t = loader.get_template('generic/error/' + str(status_code) + '.html')
+    return HttpResponse(t.render(Context({'error': status_code, 'path': request.path})), status=status_code)

@@ -24,6 +24,10 @@ from django.contrib import admin
 
 admin.autodiscover()
 
+handler403 = 'generic.views.error403'
+handler404 = 'generic.views.error404'
+handler500 = 'generic.views.error500'
+
 # We need to load generic which handles our index, search, and about page. Then
 # comic, and user which both handle their own models. Besides that just the
 # usual stuff, media, resources, admin panel, and favicon.
