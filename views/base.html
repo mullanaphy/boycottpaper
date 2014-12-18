@@ -6,7 +6,7 @@
   <head>
     {% block head %}
       <meta charset="utf-8">
-      <title>{% site "title" %}</title>
+      <title>{% block title %}{% site "title" %}{% endblock %}</title>
       {% block head_trackers %}
         {% google_analytics %}
       {% endblock %}
