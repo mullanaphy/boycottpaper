@@ -48,9 +48,9 @@ def index(request):
 # @return HttpResponse
 def search(request):
     if request.REQUEST['q']:
-        search = Search.objects.all().filter(content__contains=request.REQUEST['q'].lower())
+        collection = find(request.REQUEST['q'].lower())
         t = loader.get_template('generic/search/results.html')
-        c = Context({'q': request.REQUEST['q'], 'collection': search, })
+        c = Context({'q': request.REQUEST['q'], 'collection': collection})
         return HttpResponse(t.render(c))
     else:
         return render_to_response('generic/search/results.html', {'path': request.path})
@@ -91,7 +91,9 @@ def error403(request):
 # @param request HttpRequest coming in from Django.
 # @return HttpResponse
 def error404(request):
-    return error(404, request)
+    t = loader.get_template('generic/error/404.html')
+    collection = find(request.path.replace('/', ''))
+    return HttpResponse(t.render(Context({'error': 404, 'path': request.path, 'collection': collection})), status=404)
 
 
 ##
@@ -112,3 +114,7 @@ def error500(request):
 def error(status_code, request):
     t = loader.get_template('generic/error/' + str(status_code) + '.html')
     return HttpResponse(t.render(Context({'error': status_code, 'path': request.path})), status=status_code)
+
+
+def find(term):
+    return Search.objects.all().filter(content__contains=term)

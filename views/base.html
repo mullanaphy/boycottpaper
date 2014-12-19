@@ -51,7 +51,7 @@
           <li{% if home == path %} class="active"{% endif %}><a href="{{ home }}">Latest</a></li>
           <li{% if archives == path %} class="active"{% endif %}><a href="{{ archives }}">Archives</a></li>
           <li{% if about == path %} class="active"{% endif %}><a href="{{ about }}">About</a></li>
-          <li><a href="{% site 'patreon' %}" class="">Support</a></li>
+          <li><a href="{% site 'patreon' %}" class="navbar-support"><span class="fa fa-gift"></span> Support</a></li>
         </ul>
         <form action="{% url 'generic.views.search' %}" class="navbar-form navbar-right" role="search">
           <div class="input-group">

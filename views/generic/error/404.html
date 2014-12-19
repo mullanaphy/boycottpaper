@@ -3,4 +3,13 @@
 
 {% block title %}Could not be found{% endblock %}
 
-{% block content %}Sorry to say this, yet it seems that <strong>{{ path }}</strong> couldn't be found.{% endblock %}
+{% block content %}<p>Sorry to say this, yet it seems that <strong>{{ path }}</strong> couldn't be found.</p>
+  {% if collection %}<hr/>
+    <p>Perhaps you were looking for one of these:</p>
+    <ul>
+      {% for row in collection %}
+        <li><strong>{{ row.model }}</strong> &raquo; <a href="{{ row.url }}">{{ row.title }}</a></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock %}

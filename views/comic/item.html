@@ -6,16 +6,15 @@
 
 {% block head_meta_description %}{{ comic.description }}{% endblock %}
 
-{% url 'comic.views.load_by_slug' comic=comic.slug _format='html' as comic_url %}
 {% block head_meta %}
   {{ block.super }}
-  <link rel="canonical" href="{% site "url" %}{{ comic_url }}">
+  <link rel="canonical" href="{% site "url" %}{% url 'comic.views.load_by_slug' comic=comic.slug _format='html' %}}">
 {% endblock %}
 {% block head_meta_facebook %}
   <meta property="og:site_name" content="{% site "title" %}">
   <meta property="og:title" content="{{ comic.title }}">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="{% site "url" %}{{ comic_url }}">
+  <meta property="og:url" content="{% site "url" %}{% url 'comic.views.load_by_slug' comic=comic.slug _format='html' %}">
   <meta property="og:image" content="{% site "url" %}{{ comic.panel_set.all.0.source.url }}">
   <meta property="og:description" content="{{ comic.description }}">
   <meta property="article:author" content="https://www.facebook.com/mullanaphy">
