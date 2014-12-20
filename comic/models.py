@@ -53,6 +53,18 @@ class Panel(models.Model):
         return str(self.comic) + ' » Panel #' + str(self.sort)
 
 
+# Our comics are made up of one to four images, each panel is separate
+# in order to dynamically change the page layout depending on our end
+# user's resolution.
+class Hidden(models.Model):
+    comic = models.ForeignKey(Comic)
+    alt = models.CharField(max_length=255)
+    source = models.FileField(upload_to='comic/%y/%m/%d/hidden/%id')
+
+    def __str__(self):
+        return str(self.comic) + ' » Hidden Panel'
+
+
 # On Comic save we're going to dump all of its alphanumeric content
 # into a Search model, which has a full text index. This way we can
 # do a match against for search instead of something like Sphinx

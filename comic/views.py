@@ -159,6 +159,10 @@ def json_response(comic):
             '_format': 'json'
         })
 
+    hidden_panel = comic.hidden_set.all()[:1]
+    if hidden_panel:
+        response_data['hidden'] = settings.SITE['url'] + hidden_panel[0].source.url
+
     return HttpResponse(simplejson.dumps(response_data), mimetype="application/json")
 
 
@@ -174,14 +178,23 @@ def html_response(comic, request):
         next_comic = next_comic[0]
     else:
         next_comic = False
+
     previous_comic = Comic.objects.filter(pk__lt=comic.id).order_by('-id')[:1]
     if previous_comic:
         previous_comic = previous_comic[0]
     else:
         previous_comic = False
+
+    hidden_panel = comic.hidden_set.all()[:1]
+    if hidden_panel:
+        hidden_panel = hidden_panel[0].source.url
+    else:
+        hidden_panel = False
+
     return render_to_response('comic/item.html', {
         'comic': comic,
         'next_comic': next_comic,
         'previous_comic': previous_comic,
+        'hidden_panel': hidden_panel,
         'path': request.path
     })
