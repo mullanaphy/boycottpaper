@@ -48,7 +48,7 @@
           {% url 'generic.views.index' as home %}
           {% url 'comic.views.index' as archives %}
           {% url 'generic.views.about' as about %}
-          <li{% if home == path %} class="active"{% endif %}><a href="{{ home }}">Latest</a></li>
+          <li{% if home == path %} class="active"{% endif %}><a href="{{ home }}#comic">Latest</a></li>
           <li{% if archives == path %} class="active"{% endif %}><a href="{{ archives }}">Archives</a></li>
           <li{% if about == path %} class="active"{% endif %}><a href="{{ about }}">About</a></li>
           <li><a href="{% site 'patreon' %}" class="navbar-support"><span class="fa fa-gift"></span> Support</a></li>

@@ -25,15 +25,15 @@
     <div class="col-xs-12 col-sm-6">
       <ul class="pagination">
         {% if previous_comic %}
-          <li><a href="{% url 'comic.views.first' %}"><span class="hidden-xs">First</span><span class="visible-xs">&laquo;&laquo;</span></a></li>
-          <li><a href="{% url 'comic.views.load_by_slug' comic=previous_comic.slug _format='html' %}"><span class="hidden-xs">Previous</span><span class="visible-xs">&laquo;</span></a></li>
+          <li><a href="{% url 'comic.views.first' %}#comic"><span class="hidden-xs">First</span><span class="visible-xs">&laquo;&laquo;</span></a></li>
+          <li><a href="{% url 'comic.views.load_by_slug' comic=previous_comic.slug _format='html' %}#comic"><span class="hidden-xs">Previous</span><span class="visible-xs">&laquo;</span></a></li>
         {% else %}
           <li class="disabled"><a href="javascript:void(0);"><span class="hidden-xs">First</span><span class="visible-xs">&laquo;&laquo;</span></a></li>
           <li class="disabled"><a href="javascript:void(0);"><span class="hidden-xs">Previous</span><span class="visible-xs">&laquo;</span></a></li>
         {% endif %}
         {% if next_comic %}
-          <li><a href="{% url 'comic.views.load_by_slug' comic=next_comic.slug _format='html' %}"><span class="hidden-xs">Next</span><span class="visible-xs">&raquo;</span></a></li>
-          <li><a href="{% url 'comic.views.latest' %}"><span class="hidden-xs">Latest</span><span class="visible-xs">&raquo;&raquo;</span></a></li>
+          <li><a href="{% url 'comic.views.load_by_slug' comic=next_comic.slug _format='html' %}#comic"><span class="hidden-xs">Next</span><span class="visible-xs">&raquo;</span></a></li>
+          <li><a href="{% url 'comic.views.latest' %}#comic"><span class="hidden-xs">Latest</span><span class="visible-xs">&raquo;&raquo;</span></a></li>
         {% else %}
           <li class="disabled"><a href="javascript:void(0);"><span class="hidden-xs">Next</span><span class="visible-xs">&raquo;</span></a></li>
           <li class="disabled"><a href="javascript:void(0);"><span class="hidden-xs">Latest</span><span class="visible-xs">&raquo;&raquo;</span></a></li>
@@ -41,7 +41,7 @@
       </ul>
     </div>
     <div class="col-sm-6 hidden-xs text-right">
-      <h2>{{ comic.title }}</h2>
+      <h2 id="comic">{{ comic.title }}</h2>
     </div>
     {% with comic.panel_set.all as panels %}
       {% if panels|length > 1 %}
@@ -65,15 +65,15 @@
     <div class="col-xs-12 col-sm-6">
       <ul class="pagination">
         {% if previous_comic %}
-          <li><a href="{% url 'comic.views.first' %}"><span class="hidden-xs">First</span><span class="visible-xs">&laquo;&laquo;</span></a></li>
-          <li><a href="{% url 'comic.views.load_by_slug' comic=previous_comic.slug _format='html' %}"><span class="hidden-xs">Previous</span><span class="visible-xs">&laquo;</span></a></li>
+          <li><a href="{% url 'comic.views.first' %}#comic"><span class="hidden-xs">First</span><span class="visible-xs">&laquo;&laquo;</span></a></li>
+          <li><a href="{% url 'comic.views.load_by_slug' comic=previous_comic.slug _format='html' %}#comic"><span class="hidden-xs">Previous</span><span class="visible-xs">&laquo;</span></a></li>
         {% else %}
           <li class="disabled"><a href="javascript:void(0);"><span class="hidden-xs">First</span><span class="visible-xs">&laquo;&laquo;</span></a></li>
           <li class="disabled"><a href="javascript:void(0);"><span class="hidden-xs">Previous</span><span class="visible-xs">&laquo;</span></a></li>
         {% endif %}
         {% if next_comic %}
-          <li><a href="{% url 'comic.views.load_by_slug' comic=next_comic.slug _format='html' %}"><span class="hidden-xs">Next</span><span class="visible-xs">&raquo;</span></a></li>
-          <li><a href="{% url 'comic.views.latest' %}"><span class="hidden-xs">Latest</span><span class="visible-xs">&raquo;&raquo;</span></a></li>
+          <li><a href="{% url 'comic.views.load_by_slug' comic=next_comic.slug _format='html' %}#comic"><span class="hidden-xs">Next</span><span class="visible-xs">&raquo;</span></a></li>
+          <li><a href="{% url 'comic.views.latest' %}#comic"><span class="hidden-xs">Latest</span><span class="visible-xs">&raquo;&raquo;</span></a></li>
         {% else %}
           <li class="disabled"><a href="javascript:void(0);"><span class="hidden-xs">Next</span><span class="visible-xs">&raquo;</span></a></li>
           <li class="disabled"><a href="javascript:void(0);"><span class="hidden-xs">Latest</span><span class="visible-xs">&raquo;&raquo;</span></a></li>
