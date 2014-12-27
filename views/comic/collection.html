@@ -1,17 +1,35 @@
 {% extends "base.html" %}
+{% load number_range %}
 {# Boycott Paper, (c) John Mullanaphy (john@jo.mu) 2014, Licensed with OSL 3.0 #}
 
 {% block title %}Archives | {{ block.super }}{% endblock %}
 
 {% block content %}
-  <h1>Archives{% if page and page > 1 %}
-    <small>Page {{ page }}</small>{% endif %}</h1>
+  <h1>Archives{% if page_id and page_id > 1 %}
+    <small>Page {{ page_id }}</small>{% endif %}</h1>
   {% if collection %}
     <ul>
       {% for row in collection %}
         <li><a href="{% url 'comic.views.load_by_slug' comic=row.slug _format='html' %}">{{ row.title }}</a></li>
       {% endfor %}
     </ul>
+    {% if pages > 1 %}
+      <ul class="pagination">
+        {% if page_id > 1 %}
+          <li><a href="javascript:void(0);">&laquo;</a></li>
+        {% else %}
+          <li class="disabled"><a href="{% url 'comic.views.index' %}">&laquo;</a></li>
+        {% endif %}
+        {% for i in pages|number_range %}
+          <li{% if i == page_id %} class="active"{% endif %}><a href="{% url 'comic.views.index' %}?pageId={{ i }}">{{ i }}</a></li>
+        {% endfor %}
+        {% if page_id < pages %}
+          <li><a href="javascript:void(0);">&raquo;</a></li>
+        {% else %}
+          <li class="disabled"><a href="{% url 'comic.views.index' %}?pageId={{ pages }}">&raquo;</a></li>
+        {% endif %}
+      </ul>
+    {% endif %}
   {% else %}
     <p>No comics are available.</p>
   {% endif %}

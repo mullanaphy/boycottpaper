@@ -19,7 +19,6 @@ to john@jo.mu so we can send you a copy immediately.
 
 from django import template
 from django.conf import settings
-import urllib
 
 register = template.Library()
 
@@ -94,3 +93,11 @@ def social_media():
         return code
     else:
         return ''
+
+
+@register.filter
+def number_range(number, limit):
+    if limit:
+        return range(number - limit, number + limit)
+    else:
+        return range(1, number)

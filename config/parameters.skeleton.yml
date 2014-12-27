@@ -11,6 +11,7 @@ site:
     - [facebook, Facebook, 'https://www.facebook.com/facebookname']
     - [twitter, Twitter, 'https://www.twitter.com/twittername']
     # [Font Awesome Icon, Title, Url]
+  comic_limit: 10
 
 media:
   url: /media/

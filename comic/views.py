@@ -24,6 +24,7 @@ from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 import json as simplejson
 import random as randomint
+from math import ceil
 from comic.models import Comic
 from collections import OrderedDict
 
@@ -34,9 +35,29 @@ from collections import OrderedDict
 # @param request HttpRequest coming in from Django.
 # @return HttpResponse
 def index(request):
-    collection = Comic.objects.all().order_by('-created')[:3]
+    if 'pageId' in request.REQUEST:
+        page_id = int(request.REQUEST['pageId'])
+    else:
+        page_id = 1
+
+    if 'comic_limit' in settings.SITE:
+        limit = int(settings.SITE['comic_limit'])
+    else:
+        limit = 10
+
+    count = Comic.objects.all().count()
+    pages = int(ceil(count / limit))
+
+    if page_id > pages:
+        page_id = pages
+    elif page_id < 1:
+        page_id = 1
+
+    start = (page_id * limit) - limit
+
+    collection = Comic.objects.all().order_by('-created')[start:start + limit]
     t = loader.get_template('comic/collection.html')
-    c = Context({'collection': collection, 'path': request.path})
+    c = Context({'collection': collection, 'path': request.path, 'limit': limit, 'page_id': page_id, 'pages': pages, 'start': start})
     return HttpResponse(t.render(c))
 
 
@@ -126,38 +147,25 @@ def load_by_slug(request, comic, _format='html'):
 # @param comic Comic model.
 # @return HttpResponse
 def json_response(comic):
-    response_data = OrderedDict([
-        ("id", int(comic.pk)),
-        ("url", settings.SITE['url'] + reverse('comic.views.load_by_slug', kwargs={
-            'comic': comic.slug,
-            '_format': 'html'
-        })),
-        ("slug", comic.slug),
-        ("title", comic.title),
-        ("description", comic.description),
-        ("author", settings.SITE['url'] + reverse('user.views.load_by_slug', kwargs={
-            'user': comic.author.username,
-            '_format': 'json'
-        })),
-        ("panels", []),
-        ("created", str(comic.created)), ("updated", str(comic.updated))
-    ])
+    response_data = OrderedDict([("id", int(comic.pk)), (
+        "url",
+        settings.SITE['url'] + reverse('comic.views.load_by_slug', kwargs={'comic': comic.slug, '_format': 'html'})),
+                                 ("slug", comic.slug), ("title", comic.title), ("description", comic.description), (
+            "author", settings.SITE['url'] + reverse('user.views.load_by_slug',
+                kwargs={'user': comic.author.username, '_format': 'json'})), ("panels", []),
+                                 ("created", str(comic.created)), ("updated", str(comic.updated))])
     for panel in comic.panel_set.all().order_by('sort'):
         response_data['panels'].append(settings.SITE['url'] + panel.source.url)
 
     previous_comic = Comic.objects.filter(pk__lt=comic.id).order_by('-id')[:1]
     if previous_comic:
-        response_data['previous'] = settings.SITE['url'] + reverse('comic.views.load_by_slug', kwargs={
-            'comic': previous_comic[0].slug,
-            '_format': 'json'
-        })
+        response_data['previous'] = settings.SITE['url'] + reverse('comic.views.load_by_slug',
+            kwargs={'comic': previous_comic[0].slug, '_format': 'json'})
 
     next_comic = Comic.objects.filter(pk__gt=comic.id)[:1]
     if next_comic:
-        response_data['next'] = settings.SITE['url'] + reverse('comic.views.load_by_slug', kwargs={
-            'comic': next_comic[0].slug,
-            '_format': 'json'
-        })
+        response_data['next'] = settings.SITE['url'] + reverse('comic.views.load_by_slug',
+            kwargs={'comic': next_comic[0].slug, '_format': 'json'})
 
     hidden_panel = comic.hidden_set.all()[:1]
     if hidden_panel:
@@ -191,10 +199,6 @@ def html_response(comic, request):
     else:
         hidden_panel = False
 
-    return render_to_response('comic/item.html', {
-        'comic': comic,
-        'next_comic': next_comic,
-        'previous_comic': previous_comic,
-        'hidden_panel': hidden_panel,
-        'path': request.path
-    })
+    return render_to_response('comic/item.html',
+        {'comic': comic, 'next_comic': next_comic, 'previous_comic': previous_comic, 'hidden_panel': hidden_panel,
+         'path': request.path})

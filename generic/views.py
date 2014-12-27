@@ -47,7 +47,7 @@ def index(request):
 # @param request HttpRequest coming in from Django.
 # @return HttpResponse
 def search(request):
-    if request.REQUEST['q']:
+    if 'q' in request.REQUEST:
         collection = find(request.REQUEST['q'].lower())
         t = loader.get_template('generic/search/results.html')
         c = Context({'q': request.REQUEST['q'], 'collection': collection})
