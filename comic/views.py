@@ -45,19 +45,21 @@ def index(request):
     else:
         limit = 10
 
+    limit = 25
+
     count = Comic.objects.all().count()
-    pages = int(ceil(count / limit))
+    pages = int(ceil(float(count) / float(limit)))
 
     if page_id > pages:
         page_id = pages
-    elif page_id < 1:
+    if page_id < 1:
         page_id = 1
 
     start = (page_id * limit) - limit
 
-    collection = Comic.objects.all().order_by('-created')[start:start + limit]
+    collection = Comic.objects.all().order_by('-created')[0:start + limit]
     t = loader.get_template('comic/collection.html')
-    c = Context({'collection': collection, 'path': request.path, 'limit': limit, 'page_id': page_id, 'pages': pages, 'start': start})
+    c = Context({'collection': collection, 'path': request.path, 'limit': limit, 'page_id': page_id, 'pages': pages})
     return HttpResponse(t.render(c))
 
 
