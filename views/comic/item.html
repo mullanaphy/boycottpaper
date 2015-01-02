@@ -8,7 +8,7 @@
 
 {% block head_meta %}
   {{ block.super }}
-  <link rel="canonical" href="{% site "url" %}{% url 'comic.views.load_by_slug' comic=comic.slug _format='html' %}}">
+  <link rel="canonical" href="{% site "url" %}{% url 'comic.views.load_by_slug' comic=comic.slug _format='html' %}">
 {% endblock %}
 {% block head_meta_facebook %}
   <meta property="og:site_name" content="{% site "title" %}">
