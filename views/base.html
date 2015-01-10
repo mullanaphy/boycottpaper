@@ -32,8 +32,11 @@
   </head>
   <body>
   <div class="container">
-    <div class="text-center logo hidden-sm hidden-xs"><img alt="{% site 'title' %}" src="/media/generic/logo.jpg"></div>
-    <nav class="navbar navbar-default" role="navigation">
+    <div class="logo hidden-sm hidden-xs">
+      <a href="{% site 'patreon' %}" class="header-patreon"><img alt="Will comic for food!" src="/media/generic/patreon.png"></a>
+      <img alt="{% site 'title' %}" src="/media/generic/logo.jpg">
+    </div>
+    <nav class="navbar navbar-default clearfix" role="navigation">
       <div class="navbar-header">
         <a class="navbar-brand hidden-md hidden-lg" href="{% url 'generic.views.index' %}">{% site 'title' %}</a>
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-dropdown">
