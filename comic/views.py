@@ -35,6 +35,47 @@ from collections import OrderedDict
 # @param request HttpRequest coming in from Django.
 # @return HttpResponse
 def index(request):
+    def res(collection, count, page_id, limit, pages):
+        t = loader.get_template('comic/collection.html')
+        c = Context(
+            {'collection': collection, 'path': request.path, 'limit': limit, 'page_id': page_id, 'pages': pages})
+        return HttpResponse(t.render(c))
+
+    return index_request(request, res)
+
+
+##
+# Load an index page listing all of our comics.
+#
+# @param request HttpRequest coming in from Django.
+# @return HttpResponse
+def index_json(request):
+    def res(collection, count, page_id, limit, pages):
+        response_data = OrderedDict([("page_id", page_id), ("limit", limit), ("count", count), ("comic", [])])
+
+        for comic in collection:
+            response_data['comic'].append(settings.SITE['url'] + reverse('comic.views.load_by_slug',
+                kwargs={'comic': comic.slug, '_format': 'json'}))
+
+        if page_id < pages:
+            response_data['next'] = settings.SITE['url'] + reverse('comic.views.index_json',
+                kwargs={'page': page_id + 1})
+
+        if page_id > 1:
+            response_data['next'] = settings.SITE['url'] + reverse('comic.views.index_json',
+                kwargs={'page': page_id - 1})
+
+        return HttpResponse(simplejson.dumps(response_data), mimetype="application/json")
+
+    return index_request(request, res)
+
+
+##
+# Get our data to use accordingly.
+#
+# @param request HttpRequest coming in from Django.
+# @return HttpResponse
+def index_request(request, res):
     if 'pageId' in request.REQUEST:
         page_id = int(request.REQUEST['pageId'])
     else:
@@ -43,9 +84,7 @@ def index(request):
     if 'comic_limit' in settings.SITE:
         limit = int(settings.SITE['comic_limit'])
     else:
-        limit = 10
-
-    limit = 25
+        limit = 25
 
     count = Comic.objects.all().count()
     pages = int(ceil(float(count) / float(limit)))
@@ -57,10 +96,7 @@ def index(request):
 
     start = (page_id * limit) - limit
 
-    collection = Comic.objects.all().order_by('-created')[0:start + limit]
-    t = loader.get_template('comic/collection.html')
-    c = Context({'collection': collection, 'path': request.path, 'limit': limit, 'page_id': page_id, 'pages': pages})
-    return HttpResponse(t.render(c))
+    return res(Comic.objects.all().order_by('-created')[0:start + limit], count, page_id, limit, pages)
 
 
 ##
@@ -173,6 +209,10 @@ def json_response(comic):
     if hidden_panel:
         response_data['hidden'] = settings.SITE['url'] + hidden_panel[0].source.url
 
+    commentary = comic.commentary_set.all()[:1]
+    if commentary:
+        response_data['commentary'] = commentary[0].content
+
     return HttpResponse(simplejson.dumps(response_data), mimetype="application/json")
 
 
@@ -201,6 +241,12 @@ def html_response(comic, request):
     else:
         hidden_panel = False
 
+    commentary = comic.commentary_set.all()[:1]
+    if commentary:
+        commentary = commentary[0]
+    else:
+        commentary = False
+
     return render_to_response('comic/item.html',
         {'comic': comic, 'next_comic': next_comic, 'previous_comic': previous_comic, 'hidden_panel': hidden_panel,
-         'path': request.path})
+         'commentary': commentary, 'path': request.path})

@@ -43,3 +43,10 @@ class About(models.Model):
     avatar = models.FileField(upload_to='generic/about/%id')
     created = models.DateTimeField('date created', auto_now_add=True)
     updated = models.DateTimeField('date updated', auto_now=True)
+
+##
+# If I want to move comics/users/whatever to a new location, this will help with that.
+REQUEST_METHODS = ('GET', 'POST', 'PUT', 'DELETE')
+class Rewrite(models.Model):
+    request_method = models.CharField(max_length=1, choices=REQUEST_METHODS)
+    request_uri = models.CharField(max_length=255)

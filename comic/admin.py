@@ -17,7 +17,7 @@ to john@jo.mu so we can send you a copy immediately.
 @author John Mullanaphy <john@jo.mu>
 """
 
-from comic.models import Comic, Panel, Hidden
+from comic.models import Comic, Panel, Hidden, Commentary
 from django.contrib import admin
 
 
@@ -28,3 +28,4 @@ from django.contrib import admin
 admin.site.register(Comic)
 admin.site.register(Panel)
 admin.site.register(Hidden)
+admin.site.register(Commentary)

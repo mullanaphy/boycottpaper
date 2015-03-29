@@ -52,8 +52,7 @@
         {% endfor %}
       {% elif panels|length == 1 %}
         {% with panels|first as panel %}
-          <div class="comic-panel col-lg-12 text-center"><img alt="{{ comic.title }}" class="img-responsive" src="{{ panel.source.url }}">
-          </div>
+          <div class="comic-panel col-lg-12 text-center"><a href="{{ panel.source.url }}"><img alt="{{ comic.title }}" class="img-responsive" src="{{ panel.source.url }}"></a></div>
         {% endwith %}
       {% else %}
         <div class="comic-panel col-lg-12">Panels missing... Sorry about that...</div>
@@ -82,4 +81,11 @@
     </div>
     <div class="text-right col-sm-6 hidden-xs">{% addthis_toolbox %}</div>
   </div>
+  {% if commentary %}
+    {% if commentary.safe %}
+      {{ commentary.content|safe }}
+    {% else %}
+      <p>{{ commentary.content }}</p>
+    {% endif %}
+  {% endif %}
 {% endblock %}

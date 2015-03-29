@@ -32,7 +32,7 @@ class Comic(models.Model):
     author = models.ForeignKey(User)
     slug = models.SlugField(max_length=32)
     title = models.CharField(max_length=32)
-    description = models.CharField(max_length=255)
+    description = models.CharField(max_length=255, null=True, blank=True)
     created = models.DateTimeField('date created', auto_now_add=True)
     updated = models.DateTimeField('date updated', auto_now=True)
 
@@ -45,9 +45,9 @@ class Comic(models.Model):
 # user's resolution.
 class Panel(models.Model):
     comic = models.ForeignKey(Comic)
-    alt = models.CharField(max_length=255)
+    alt = models.CharField(max_length=255, null=True, blank=True)
     source = models.FileField(upload_to='comic/%y/%m/%d/%id')
-    sort = models.PositiveSmallIntegerField()
+    sort = models.PositiveSmallIntegerField(null=True, blank=True)
 
     def __str__(self):
         return str(self.comic) + ' » Panel #' + str(self.sort)
@@ -58,11 +58,23 @@ class Panel(models.Model):
 # user's resolution.
 class Hidden(models.Model):
     comic = models.ForeignKey(Comic)
-    alt = models.CharField(max_length=255)
+    alt = models.CharField(max_length=255, null=True, blank=True)
     source = models.FileField(upload_to='comic/%y/%m/%d/hidden/%id')
 
     def __str__(self):
         return str(self.comic) + ' » Hidden Panel'
+
+
+# Our comics are made up of one to four images, each panel is separate
+# in order to dynamically change the page layout depending on our end
+# user's resolution.
+class Commentary(models.Model):
+    comic = models.ForeignKey(Comic)
+    content = models.TextField()
+    safe = models.BooleanField()
+
+    def __str__(self):
+        return str(self.comic) + ' » Commentary'
 
 
 # On Comic save we're going to dump all of its alphanumeric content
@@ -83,6 +95,11 @@ def on_comic_save_update_search_data(sender, instance, **kwargs):
     content = instance.title + ' ' + instance.description
     for panel in instance.panel_set.all():
         content += ' ' + panel.alt
+
+    commentary = instance.commentary_set.all()[:1]
+    if commentary:
+        content += commentary[0].content
+
     content = content.lower()
     search.content = re.sub(r'[^a-z0-9 ]+', '', content)
 
@@ -99,4 +116,10 @@ def on_comic_save_update_search_data(sender, instance, **kwargs):
 # On Panel save we should look to update our Comic's search model.
 @receiver(post_save, sender=Panel)
 def on_panel_save_update_search_data(sender, instance, **kwargs):
+    return on_comic_save_update_search_data(sender, instance.comic, **kwargs)
+
+
+# On Panel save we should look to update our Comic's search model.
+@receiver(post_save, sender=Commentary)
+def on_commentary_save_update_search_data(sender, instance, **kwargs):
     return on_comic_save_update_search_data(sender, instance.comic, **kwargs)
