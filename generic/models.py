@@ -44,9 +44,18 @@ class About(models.Model):
     created = models.DateTimeField('date created', auto_now_add=True)
     updated = models.DateTimeField('date updated', auto_now=True)
 
+
+# We're going to use these for the Rewrite choices.
+REQUEST_METHODS = (
+    ('GET', 'GET'),
+    ('POST', 'POST'),
+    ('PUT', 'PUT'),
+    ('DELETE', 'DELETE'),
+)
+
+
 ##
 # If I want to move comics/users/whatever to a new location, this will help with that.
-REQUEST_METHODS = ('GET', 'POST', 'PUT', 'DELETE')
 class Rewrite(models.Model):
     request_method = models.CharField(max_length=1, choices=REQUEST_METHODS)
     request_uri = models.CharField(max_length=255)
