@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+{% spaceless %}
+  {% load site %}
+  {# Boycott Paper, (c) John Mullanaphy (john@jo.mu) 2014, Licensed with OSL 3.0 #}
+  <head>
+    {% block head %}
+      <meta charset="utf-8">
+      <title>{% block title %}Oops...{% endblock %}</title>
+      <meta name="description" content="{% block head_meta_description %}{% site "description" %}{% endblock %}">
+      <meta name="author" content="{% block head_meta_author %}{% site "author" %}{% endblock %}">
+      <link rel="shortcut icon" href="/media/favicon.png">
+      <style class="text/css">*{border:0;margin:0;padding:0}body{margin:20px 0}a{color:#337ab7;text-decoration:none}a:active,a:hover{color:#23527c}#c{margin:0 auto;width:80%}#b{margin:20px 0}footer{border-top:solid 1px #ddd;font-size:.8em;padding-top:10px}#r{float:right}#h{float:left}p{margin:20px 0}ul{list-style:none;margin:0 20px}</style>
+    {% endblock %}
+  </head>
+  <body>
+  <div id="c">
+    <h1>{% block heading %}Fiddlesticks...{% endblock %}</h1>
+
+    <div id="b">{% block content %}{% endblock %}</div>
+    <footer>{% block copyright %}
+      <div id="h"><a href="/">{% site "title" %}</a></div>
+      <div id="r">{% site "copyright" %}{% endblock %}</div>
+    </footer>
+  </div>
+  </body>
+  </html>
+{% endspaceless %}
