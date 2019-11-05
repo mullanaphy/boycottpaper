@@ -96,7 +96,7 @@ def index_request(request, res):
 
     start = (page_id * limit) - limit
 
-    return res(Comic.objects.all().order_by('-created')[0:start + limit], count, page_id, limit, pages)
+    return res(Comic.objects.all().order_by('-created')[start:start + limit], count, page_id, limit, pages)
 
 
 ##
