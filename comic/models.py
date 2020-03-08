@@ -45,9 +45,9 @@ class Comic(models.Model):
 # user's resolution.
 class Panel(models.Model):
     comic = models.ForeignKey(Comic)
-    alt = models.CharField(max_length=255, null=True, blank=True)
+    alt = models.CharField(max_length=255)
     source = models.FileField(upload_to='comic/%y/%m/%d/%id')
-    sort = models.PositiveSmallIntegerField(null=True, blank=True)
+    sort = models.PositiveSmallIntegerField()
 
     def __str__(self):
         return str(self.comic) + ' » Panel #' + str(self.sort)
@@ -95,10 +95,6 @@ def on_comic_save_update_search_data(sender, instance, **kwargs):
     content = instance.title + ' ' + instance.description
     for panel in instance.panel_set.all():
         content += ' ' + panel.alt
-
-    commentary = instance.commentary_set.all()[:1]
-    if commentary:
-        content += commentary[0].content
 
     content = content.lower()
     search.content = re.sub(r'[^a-z0-9 ]+', '', content)
