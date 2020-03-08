@@ -60,7 +60,7 @@ Please send bugs to me via
 Author
 ------
 
-John Mullanaphy - <john@jo.mu> - <http://jo.mu/>
+John Mullanaphy - <hi@john.mu> - <https://john.mu/>
 That's it for now...
 
 License
